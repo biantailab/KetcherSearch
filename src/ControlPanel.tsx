@@ -323,6 +323,7 @@ function ControlPanel({
         }
         .button-group button:disabled, .button-group select:disabled {
           opacity: 0.5;
+          cursor: not-allowed;
         }
         @media screen and (max-width: 602px) {
           .input-stars-row {
@@ -339,6 +340,7 @@ function ControlPanel({
           }
           .button-group button:disabled, .button-group select:disabled {
             opacity: 0.5;
+            cursor: not-allowed;
           }
         }
       `}</style>
