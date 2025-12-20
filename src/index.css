@@ -28,7 +28,59 @@ input {
 }
 
 #smiles-input {
-  --uno: rounded border-1 border-[#cad3dd] border-solid hover:border-[#4ab8c2] transition-all duration-300;
-  --uno: text-kettext focus-visible:outline-0 focus:border-[#4ab8c2] ;
+  --uno: text-kettext;
+}
+
+.ketcher-search {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  height: 24px;
+  border-radius: 4px;
+  gap: 4px;
+  padding: 4px;
+  border: none;
+  outline: 1px solid transparent;
+  background: #EFF2F5;
+  transition: outline-color 300ms ease;
+}
+
+.ketcher-search:hover {
+  outline-color: #167782;
+}
+
+.ketcher-search:focus-within {
+  outline-color: #167782;
+}
+
+.ketcher-search:focus-within .ketcher-search__icon {
+  color: #167782;
+}
+
+.ketcher-search__icon {
+  width: 16px;
+  height: 16px;
+  padding-left: 0;
+  padding-right: 0;
+  color: #167782;
+  flex: 0 0 auto;
+}
+
+.ketcher-search__input {
+  border: none;
+  outline: none;
+  background: transparent;
+  height: 100%;
+  width: 100%;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: #000000;
+}
+
+.ketcher-search__input::placeholder {
+  color: #757575;
+  opacity: 1;
 }
 

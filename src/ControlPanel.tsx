@@ -230,23 +230,37 @@ function ControlPanel({
       )}
       {/* Responsive input area */}
       <div className="input-stars-row">
-        <input
-          id="smiles-input"
-          type="text"
-          value={smilesInput}
-          onChange={handleSmilesChange}
-          onFocus={() => onInputFocusChange && onInputFocusChange(true)}
-          onBlur={() => onInputFocusChange && onInputFocusChange(false)}
-          placeholder="SMILES"
-          style={{ 
-            height: '22px',
-            flex: 1, 
-            minWidth: 0,
-            borderColor: isValidSmiles || !smilesInput ? '' : '#ff6b6b',
-            // borderWidth: '1px',
-            // borderStyle: 'solid',
+        <div
+          className="ketcher-search"
+          style={{
+            outlineColor: isValidSmiles || !smilesInput ? undefined : '#FF4A4A',
           }}
-        />
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 28 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="ketcher-search__icon"
+            aria-hidden="true"
+          >
+            <path
+              d="M22.697 21.492l-5.68-5.68a6.503 6.503 0 001.358-4c0-1.754-.685-3.399-1.923-4.64a6.514 6.514 0 00-4.64-1.922 6.523 6.523 0 00-4.64 1.923 6.51 6.51 0 00-1.922 4.64c0 1.752.685 3.401 1.923 4.64a6.51 6.51 0 004.64 1.922 6.509 6.509 0 003.996-1.356l5.68 5.678a.18.18 0 00.255 0l.953-.951a.18.18 0 000-.254zm-7.42-6.215a4.874 4.874 0 01-3.464 1.435 4.874 4.874 0 01-3.466-1.434 4.874 4.874 0 01-1.435-3.466c0-1.308.51-2.54 1.435-3.465a4.874 4.874 0 013.466-1.435c1.308 0 2.54.508 3.464 1.435a4.874 4.874 0 011.435 3.466 4.87 4.87 0 01-1.434 3.464z"
+              fill="currentColor"
+            ></path>
+          </svg>
+          <input
+            id="smiles-input"
+            type="search"
+            value={smilesInput}
+            onChange={handleSmilesChange}
+            onFocus={() => onInputFocusChange && onInputFocusChange(true)}
+            onBlur={() => onInputFocusChange && onInputFocusChange(false)}
+            placeholder="SMILES"
+            className="ketcher-search__input"
+          />
+        </div>
         {smilesInput && (
           <span 
             style={{ 
