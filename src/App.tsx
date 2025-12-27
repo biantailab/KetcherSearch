@@ -17,6 +17,8 @@ function App(): JSX.Element {
   const handleClear = async () => {
     setSmilesInput('');
     setSelectedExample('');
+    smilesInputRef.current = '';
+    lastAppliedSmilesRef.current = '';
     await clearMolecule(ketcher);
   };
 

@@ -29,9 +29,10 @@ Powered by [Ketcher](https://github.com/epam/ketcher) & [KetchKitSearch](https:/
 ## 功能
 
 - 实时转换smiles和分子结构
+- 通过CAS查询分子结构
 - Example:
     - Benzyl titanium (苄钛)
-    - Quinine (奎宁)
+    - Nonanal (壬醛)
     - Palytoxin (岩沙海葵毒素)
 - Clear smiles
 - Copy smiles

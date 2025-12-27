@@ -1,6 +1,18 @@
 import type { PubChemSection } from "../types/pubchem";
 
 const cidCache = new Map<string, number | null>();
+const smilesCache = new Map<string, string | null>();
+
+async function fetchSynonymsByCID(cid: number): Promise<string[]> {
+  const url = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${cid}/synonyms/JSON`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Synonyms query failed: ${response.status}`);
+  }
+  const data = await response.json();
+  const synonyms: string[] = data.InformationList?.Information?.[0]?.Synonym || [];
+  return Array.from(new Set((synonyms || []).map((s: string) => s?.trim()).filter(Boolean)));
+}
 
 export async function getPubChemCID(smiles: string): Promise<number | null> {
   if (cidCache.has(smiles)) {
@@ -48,16 +60,10 @@ export async function getWikipediaUrlByCID(cid: number): Promise<string | null> 
 }
 
 export async function getCASByCID(cid: number): Promise<string | null> {
-  const casUrl = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${cid}/synonyms/JSON`;
   try {
-    const casResponse = await fetch(casUrl);
-    if (!casResponse.ok) {
-      throw new Error(`CAS query failed: ${casResponse.status}`);
-    }
-    const casData = await casResponse.json();
-    const synonyms = casData.InformationList?.Information?.[0]?.Synonym || [];
+    const synonyms = await fetchSynonymsByCID(cid);
     const casNumber = synonyms.find(
-      (syn) => /^\d+-\d{2}-\d$/.test(syn) && !syn.startsWith("EC")
+      (syn: string) => /^\d+-\d{2}-\d$/.test(syn) && !syn.startsWith("EC")
     );
     return casNumber || null;
   } catch (e) {
@@ -66,16 +72,8 @@ export async function getCASByCID(cid: number): Promise<string | null> {
 }
 
 export async function getSynonymsByCID(cid: number): Promise<string[]> {
-  const url = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${cid}/synonyms/JSON`;
   try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Synonyms query failed: ${response.status}`);
-    }
-    const data = await response.json();
-    const synonyms: string[] = data.InformationList?.Information?.[0]?.Synonym || [];
-    const normalized = Array.from(new Set((synonyms || []).map((s: string) => s?.trim()).filter(Boolean)));
-    return normalized;
+    return await fetchSynonymsByCID(cid);
   } catch (e) {
     return [];
   }
@@ -176,4 +174,32 @@ export function findWikipediaLink(
     }
   }
   return null;
-} 
+}
+
+export async function getSMILESByCAS(casNumber: string): Promise<string | null> {
+  const normalizedCAS = casNumber.trim();
+  const cacheKey = `cas:${normalizedCAS}`;
+  
+  if (smilesCache.has(cacheKey)) {
+    return smilesCache.get(cacheKey)!;
+  }
+
+  try {
+    const url = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${encodeURIComponent(normalizedCAS)}/property/ConnectivitySMILES/JSON?name_type=word`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    const smiles = data.PropertyTable?.Properties?.[0]?.ConnectivitySMILES || null;
+    if (smiles) {
+      smilesCache.set(cacheKey, smiles);
+    }
+    return smiles;
+  } catch (e) {
+    console.error('Error in getSMILESByCAS:', e);
+    return null;
+  }
+}

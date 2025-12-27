@@ -7,6 +7,7 @@ import {
   getIUPACNameByCID,
   getPubChemUrlByCID,
   getPubChemData,
+  getSMILESByCAS,
 } from '@/services/pubchem';
 import {
   findDrugBankId,
@@ -26,6 +27,25 @@ interface ControlPanelProps {
   onExampleChange: (value: string) => void;
 }
 
+function SearchIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 28 28"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="ketcher-search__icon"
+      aria-hidden="true"
+    >
+      <path
+        d="M22.697 21.492l-5.68-5.68a6.503 6.503 0 001.358-4c0-1.754-.685-3.399-1.923-4.64a6.514 6.514 0 00-4.64-1.922 6.523 6.523 0 00-4.64 1.923 6.51 6.51 0 00-1.922 4.64c0 1.752.685 3.401 1.923 4.64a6.51 6.51 0 004.64 1.922 6.509 6.509 0 003.996-1.356l5.68 5.678a.18.18 0 00.255 0l.953-.951a.18.18 0 000-.254zm-7.42-6.215a4.874 4.874 0 01-3.464 1.435 4.874 4.874 0 01-3.466-1.434 4.874 4.874 0 01-1.435-3.466c0-1.308.51-2.54 1.435-3.465a4.874 4.874 0 013.466-1.435c1.308 0 2.54.508 3.464 1.435a4.874 4.874 0 011.435 3.466 4.87 4.87 0 01-1.434 3.464z"
+        fill="currentColor"
+      ></path>
+    </svg>
+  );
+}
+
 function ControlPanel({
   smilesInput,
   selectedExample,
@@ -37,6 +57,8 @@ function ControlPanel({
 }: ControlPanelProps) {
   const [loading, setLoading] = useState(false);
   const [isValidSmiles, setIsValidSmiles] = useState(true);
+  const [casInput, setCasInput] = useState('');
+  const [isValidCas, setIsValidCas] = useState(true);
 
   // Common alert messages
   const alerts = {
@@ -60,9 +82,52 @@ function ControlPanel({
     onSmilesChange(e);
   };
 
+  const handleCasInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setCasInput(value);
+    setIsValidCas(/^\d{1,7}-\d{2}-\d$/.test(value) || value === '');
+  };
+
+  const handleCasSubmit = async () => {
+    if (!casInput) return;
+    if (!isValidCas) {
+      alert('Invalid CAS number format. Expected format: XXXXXXX-XX-X');
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      const smiles = await getSMILESByCAS(casInput);
+      if (smiles) {
+        const event = {
+          target: { value: smiles }
+        } as React.ChangeEvent<HTMLInputElement>;
+        handleSmilesChange(event);
+        setIsValidSmiles(true);
+
+        if (onInputFocusChange) {
+          onInputFocusChange(true);
+          window.setTimeout(() => onInputFocusChange(false), 800);
+        }
+      } else {
+        alert('No structure found for this CAS number');
+      }
+    } catch (e) {
+      alert('Failed to fetch structure for this CAS number');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleExampleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     onExampleChange(value);
+  };
+
+  const handleClearAll = async () => {
+    setCasInput('');
+    setIsValidCas(true);
+    await onClear();
   };
 
   const handlePubChem = async () => {
@@ -234,22 +299,10 @@ function ControlPanel({
           className="ketcher-search"
           style={{
             outlineColor: isValidSmiles || !smilesInput ? undefined : '#FF4A4A',
+            flex: '2 1 700px',
           }}
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 28 28"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="ketcher-search__icon"
-            aria-hidden="true"
-          >
-            <path
-              d="M22.697 21.492l-5.68-5.68a6.503 6.503 0 001.358-4c0-1.754-.685-3.399-1.923-4.64a6.514 6.514 0 00-4.64-1.922 6.523 6.523 0 00-4.64 1.923 6.51 6.51 0 00-1.922 4.64c0 1.752.685 3.401 1.923 4.64a6.51 6.51 0 004.64 1.922 6.509 6.509 0 003.996-1.356l5.68 5.678a.18.18 0 00.255 0l.953-.951a.18.18 0 000-.254zm-7.42-6.215a4.874 4.874 0 01-3.464 1.435 4.874 4.874 0 01-3.466-1.434 4.874 4.874 0 01-1.435-3.466c0-1.308.51-2.54 1.435-3.465a4.874 4.874 0 013.466-1.435c1.308 0 2.54.508 3.464 1.435a4.874 4.874 0 011.435 3.466 4.87 4.87 0 01-1.434 3.464z"
-              fill="currentColor"
-            ></path>
-          </svg>
+          <SearchIcon />
           <input
             id="smiles-input"
             type="search"
@@ -264,7 +317,6 @@ function ControlPanel({
         {smilesInput && (
           <span 
             style={{ 
-
               marginLeft: '4px', 
               color: isValidSmiles ? '#28a745' : '#dc3545',
               fontSize: '16px',
@@ -275,11 +327,33 @@ function ControlPanel({
             {isValidSmiles ? '✓' : '✗'}
           </span>
         )}
+        <div
+          className="ketcher-search"
+          style={{
+            outlineColor: isValidCas || !casInput ? undefined : '#FF4A4A',
+            flex: '1 1 220px',
+          }}
+        >
+          <SearchIcon />
+          <input
+            id="cas-input"
+            type="search"
+            value={casInput}
+            onChange={handleCasInputChange}
+            onKeyPress={(e) => e.key === 'Enter' && handleCasSubmit()}
+            placeholder="CAS"
+            className="ketcher-search__input"
+            style={{ flex: 1 }}
+          />
+        </div>
+        <div className="button-group" style={{ display: 'contents' }}>
+          <button onClick={handleCasSubmit} disabled={loading || !casInput || !isValidCas}>Search</button>
+        </div>
         <a
           href="https://github.com/biantailab/KetcherSearch"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ verticalAlign: 'middle', marginLeft: '2px' }}
+          style={{ verticalAlign: 'middle', marginLeft: '2px', flex: '0 0 auto', whiteSpace: 'nowrap' }}
         >
           <img
             src="https://img.shields.io/github/stars/biantailab/KetcherSearch.svg?style=social"
@@ -293,10 +367,10 @@ function ControlPanel({
         <select value={selectedExample} onChange={handleExampleChange}>
           <option value="">Example:</option>
           <option value="C(C1=CC=CC=C1)[Ti](CC1=CC=CC=C1)(CC1=CC=CC=C1)CC1=CC=CC=C1">Benzyl titanium</option>
-          <option value="COC1=CC2=C(C=CN=C2C=C1)[C@H]([C@@H]3CC4CCN3C[C@@H]4C=C)O">Quinine</option>
+          <option value="CCCCCCCCC=O">Nonanal</option>
           <option value="C[C@H]1C[C@@]2([C@H](O[C@](C1)(O2)CCCCCCC[C@@H](C[C@@H]3[C@@H]([C@H]([C@H]([C@@](O3)(C[C@@H]([C@@H](C)/C=C/[C@H](CC[C@H]([C@H]([C@@H]4C[C@H]([C@@H]([C@H](O4)C[C@H]([C@@H](C[C@@H]5[C@H]([C@@H]([C@H]([C@@H](O5)C[C@@H](/C=C\C=C\C[C@H]([C@@H]([C@@H](C/C=C\C(=C)CC[C@@H]([C@H]([C@@H]([C@H](C)C[C@@H]6[C@@H]([C@H]([C@@H]([C@H](O6)/C=C\[C@H]([C@@H](C[C@@H]7C[C@@H]8C[C@H](O7)[C@H](O8)CC[C@@H]9[C@@H](C[C@H](O9)CN)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)C[C@@H](C)CCCCC[C@H]([C@@H]([C@@H]([C@H]([C@@H]([C@@H]1[C@H]([C@@H]([C@H]([C@H](O1)C[C@@H]([C@@H](/C(=C/[C@@H](C[C@@H](C)[C@@H](C(=O)N/C=C/C(=O)NCCCO)O)O)/C)O)O)O)O)O)O)O)O)O)O)C">Palytoxin</option>
         </select>
-        <button onClick={onClear} disabled={loading || !smilesInput}>Clear</button>
+        <button onClick={handleClearAll} disabled={loading || (!smilesInput && !casInput)}>Clear</button>
         <button onClick={onCopy} disabled={loading || !smilesInput || !isValidSmiles}>Copy</button>
         <select onChange={handleGetSelect} disabled={loading || !smilesInput || !isValidSmiles}>
           <option value="">Get:</option>
@@ -324,6 +398,13 @@ function ControlPanel({
           max-width: 678px;
           gap: 4px;
           margin: 0px auto;
+          flex-wrap: nowrap;
+        }
+        .ketcher-search {
+          display: flex;
+          align-items: center;
+          flex: 1;
+          position: relative;
         }
         .button-group {
           display: flex;
@@ -342,6 +423,7 @@ function ControlPanel({
         @media screen and (max-width: 602px) {
           .input-stars-row {
             max-width: 100vw;
+            flex-wrap: wrap;
           }
           .button-group {
             gap: 1px;

@@ -29,9 +29,10 @@ Powered by [Ketcher](https://github.com/epam/ketcher) & [KetchKitSearch](https:/
 ## Functionality
 
 - Real-time conversion of smiles and mol
+- Query the mol via CAS
 - Example:
     - Benzyl titanium
-    - Quinine
+    - Nonanal
     - Palytoxin
 - Clear smiles
 - Copy smiles
