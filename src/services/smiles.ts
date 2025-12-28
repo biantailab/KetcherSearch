@@ -85,15 +85,6 @@ export async function applyMolfile(ketcher: Ketcher | null, molfile: string): Pr
   }
 }
 
-// 静态转换函数 - 不需要Ketcher实例
-export function validateSmiles(smiles: string): boolean {
-  if (!smiles || typeof smiles !== 'string') return false;
-  
-  // 基本的SMILES格式验证
-  const smilesPattern = /^[A-Za-z0-9@+\-\[\]()=#\\\/\\\s]+$/;
-  return smilesPattern.test(smiles.trim());
-}
-
 // 批量转换SMILES到结构式（需要Ketcher实例）
 export async function batchConvertSmilesToStructures(
   ketcher: Ketcher | null, 

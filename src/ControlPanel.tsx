@@ -14,7 +14,6 @@ import {
   buildDrugBankExactUrlByCAS,
   buildDrugBankFuzzyUrlBySmiles
 } from './services/drugbank';
-import { validateSmiles } from './services/smiles';
 import { submitToSwissTargetPrediction } from './services/swiss';
 
 interface ControlPanelProps {
@@ -56,7 +55,6 @@ function ControlPanel({
   onExampleChange
 }: ControlPanelProps) {
   const [loading, setLoading] = useState(false);
-  const [isValidSmiles, setIsValidSmiles] = useState(true);
   const [casInput, setCasInput] = useState('');
   const [isValidCas, setIsValidCas] = useState(true);
 
@@ -68,7 +66,6 @@ function ControlPanel({
     formulaNotFound: 'Molecular Formula not found',
     wikipediaNotFound: 'Wikipedia link not found',
     drugbankNotFound: 'DrugBank ID or CAS number not found',
-    invalidSmiles: 'Invalid SMILES format',
     networkError: 'Failed to fetch, please check your network',
     pubchemError: 'Failed to fetch PubChem CID, please check your network',
     wikipediaError: 'Failed to fetch Wikipedia link',
@@ -77,8 +74,6 @@ function ControlPanel({
   };
 
   const handleSmilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setIsValidSmiles(validateSmiles(value));
     onSmilesChange(e);
   };
 
@@ -103,7 +98,6 @@ function ControlPanel({
           target: { value: smiles }
         } as React.ChangeEvent<HTMLInputElement>;
         handleSmilesChange(event);
-        setIsValidSmiles(true);
 
         if (onInputFocusChange) {
           onInputFocusChange(true);
@@ -134,10 +128,6 @@ function ControlPanel({
     if (!smilesInput) {
       return;
     }
-    if (!isValidSmiles) {
-      alert(alerts.invalidSmiles);
-      return;
-    }
     setLoading(true);
     try {
       const cid = await getPubChemCID(smilesInput);
@@ -162,7 +152,7 @@ function ControlPanel({
   };
 
   const handleSTP = () => {
-    if (!smilesInput || !isValidSmiles) return;
+    if (!smilesInput) return;
     submitToSwissTargetPrediction(smilesInput);
   };
 
@@ -298,8 +288,7 @@ function ControlPanel({
         <div
           className="ketcher-search"
           style={{
-            outlineColor: isValidSmiles || !smilesInput ? undefined : '#FF4A4A',
-            flex: '2 1 700px',
+            flex: '2 1 445px',
           }}
         >
           <SearchIcon />
@@ -314,24 +303,11 @@ function ControlPanel({
             className="ketcher-search__input"
           />
         </div>
-        {smilesInput && (
-          <span 
-            style={{ 
-              marginLeft: '4px', 
-              color: isValidSmiles ? '#28a745' : '#dc3545',
-              fontSize: '16px',
-              fontWeight: 'bold'
-            }}
-            title={isValidSmiles ? 'Valid SMILES' : 'Invalid SMILES format'}
-          >
-            {isValidSmiles ? '✓' : '✗'}
-          </span>
-        )}
         <div
           className="ketcher-search"
           style={{
             outlineColor: isValidCas || !casInput ? undefined : '#FF4A4A',
-            flex: '1 1 220px',
+            flex: '1 1 140px',
           }}
         >
           <SearchIcon />
@@ -371,22 +347,22 @@ function ControlPanel({
           <option value="C[C@H]1C[C@@]2([C@H](O[C@](C1)(O2)CCCCCCC[C@@H](C[C@@H]3[C@@H]([C@H]([C@H]([C@@](O3)(C[C@@H]([C@@H](C)/C=C/[C@H](CC[C@H]([C@H]([C@@H]4C[C@H]([C@@H]([C@H](O4)C[C@H]([C@@H](C[C@@H]5[C@H]([C@@H]([C@H]([C@@H](O5)C[C@@H](/C=C\C=C\C[C@H]([C@@H]([C@@H](C/C=C\C(=C)CC[C@@H]([C@H]([C@@H]([C@H](C)C[C@@H]6[C@@H]([C@H]([C@@H]([C@H](O6)/C=C\[C@H]([C@@H](C[C@@H]7C[C@@H]8C[C@H](O7)[C@H](O8)CC[C@@H]9[C@@H](C[C@H](O9)CN)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)O)C[C@@H](C)CCCCC[C@H]([C@@H]([C@@H]([C@H]([C@@H]([C@@H]1[C@H]([C@@H]([C@H]([C@H](O1)C[C@@H]([C@@H](/C(=C/[C@@H](C[C@@H](C)[C@@H](C(=O)N/C=C/C(=O)NCCCO)O)O)/C)O)O)O)O)O)O)O)O)O)O)C">Palytoxin</option>
         </select>
         <button onClick={handleClearAll} disabled={loading || (!smilesInput && !casInput)}>Clear</button>
-        <button onClick={onCopy} disabled={loading || !smilesInput || !isValidSmiles}>Copy</button>
-        <select onChange={handleGetSelect} disabled={loading || !smilesInput || !isValidSmiles}>
+        <button onClick={onCopy} disabled={loading || !smilesInput}>Copy</button>
+        <select onChange={handleGetSelect} disabled={loading || !smilesInput}>
           <option value="">Get:</option>
           <option value="cas">CAS</option>
           <option value="iupac" title="IUPACName">Name</option>
           <option value="formula" title="Molecular Formula">Formula</option>
         </select>
-        <button onClick={handleHNMR} disabled={loading || !smilesInput || !isValidSmiles}>HNMR</button>
-        <button onClick={handlePubChem} disabled={loading || !smilesInput || !isValidSmiles}>PubChem</button>
-        <button onClick={handleGetWikipedia} disabled={loading || !smilesInput || !isValidSmiles}>Wikipedia</button>
-        <select onChange={handleDrugBankSelect} disabled={loading || !smilesInput || !isValidSmiles}>
+        <button onClick={handleHNMR} disabled={loading || !smilesInput}>HNMR</button>
+        <button onClick={handlePubChem} disabled={loading || !smilesInput}>PubChem</button>
+        <button onClick={handleGetWikipedia} disabled={loading || !smilesInput}>Wikipedia</button>
+        <select onChange={handleDrugBankSelect} disabled={loading || !smilesInput}>
           <option value="">DrugBank:</option>
           <option value="exact">exact</option>
           <option value="fuzzy">fuzzy</option>
         </select>
-        <button onClick={handleSTP} disabled={loading || !smilesInput || !isValidSmiles} title="SwissTargetPrediction">STP</button>
+        <button onClick={handleSTP} disabled={loading || !smilesInput} title="SwissTargetPrediction">STP</button>
       </div>
       {/* Responsive styles */}
       <style>{`
@@ -420,7 +396,7 @@ function ControlPanel({
           opacity: 0.5;
           cursor: not-allowed;
         }
-        @media screen and (max-width: 602px) {
+        @media screen and (max-width: 685px) {
           .input-stars-row {
             max-width: 100vw;
             flex-wrap: wrap;

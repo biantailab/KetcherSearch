@@ -21,8 +21,6 @@ export declare function readMolfile(
 
 export declare function applyMolfile(ketcher: Ketcher | null, molfile: string): Promise<ConversionResult>;
 
-export declare function validateSmiles(smiles: string): boolean;
-
 export declare function batchConvertSmilesToStructures(
   ketcher: Ketcher | null, 
   smilesList: string[]
