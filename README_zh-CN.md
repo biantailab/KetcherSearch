@@ -13,13 +13,16 @@ Powered by [Ketcher](https://github.com/epam/ketcher) & [KetchKitSearch](https:/
 ## 依赖
 
 - [pubchem](https://pubchem.ncbi.nlm.nih.gov)
-- [nmrdb](https://www.nmrdb.org)
+
+## 搜索目标
 
 > [!tip]
 > DrugBank exact和Wikipedia跳转链接来自PubChem JSON
 
-- [drugbank](https://go.drugbank.com)
+- [nmrdb](https://www.nmrdb.org)
+- [pubchem](https://pubchem.ncbi.nlm.nih.gov)
 - [wikipedia](https://en.wikipedia.org)
+- [drugbank](https://go.drugbank.com)
 - [swisstargetprediction](https://www.swisstargetprediction.ch)
 
 ## 预览

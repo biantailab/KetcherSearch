@@ -13,13 +13,16 @@ Powered by [Ketcher](https://github.com/epam/ketcher) & [KetchKitSearch](https:/
 ## Dependencies
 
 - [pubchem](https://pubchem.ncbi.nlm.nih.gov)
-- [nmrdb](https://www.nmrdb.org)
+
+## Search target
 
 > [!tip]
 > DrugBank exact and Wikipedia jump links from PubChem JSON
 
-- [drugbank](https://go.drugbank.com)
+- [nmrdb](https://www.nmrdb.org)
+- [pubchem](https://pubchem.ncbi.nlm.nih.gov)
 - [wikipedia](https://en.wikipedia.org)
+- [drugbank](https://go.drugbank.com)
 - [swisstargetprediction](https://www.swisstargetprediction.ch)
 
 ## Demo
