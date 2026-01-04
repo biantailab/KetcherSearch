@@ -10,6 +10,14 @@ import {
   getSMILESByCAS,
 } from '@/services/pubchem';
 import {
+  openChemicalBookByCAS,
+  openLeyanByCAS,
+  openMacklinByCAS,
+  openSigmaByCAS,
+  openTansooleByCAS,
+  openTciByCAS
+} from './services/shop';
+import {
   findDrugBankId,
   buildDrugBankExactUrlByCAS,
   buildDrugBankFuzzyUrlBySmiles
@@ -141,6 +149,45 @@ function ControlPanel({
       alert(alerts.pubchemError);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleShopSelect = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
+    if (!smilesInput || !value) return;
+
+    setLoading(true);
+    try {
+      const cid = await getPubChemCID(smilesInput);
+      if (!cid) {
+        alert(alerts.compoundNotFound);
+        return;
+      }
+
+      const cas = await getCASByCID(cid);
+      if (!cas) {
+        alert(alerts.casNotFound);
+        return;
+      }
+
+      if (value === 'chemicalbook') {
+        openChemicalBookByCAS(cas);
+      } else if (value === 'tansoole') {
+        openTansooleByCAS(cas);
+      } else if (value === 'tci') {
+        openTciByCAS(cas);
+      } else if (value === 'macklin') {
+        openMacklinByCAS(cas);
+      } else if (value === 'leyan') {
+        openLeyanByCAS(cas);
+      } else if (value === 'sigma') {
+        openSigmaByCAS(cas);
+      }
+    } catch {
+      alert(alerts.networkError);
+    } finally {
+      setLoading(false);
+      event.target.value = '';
     }
   };
 
@@ -363,6 +410,15 @@ function ControlPanel({
           <option value="fuzzy">fuzzy</option>
         </select>
         <button onClick={handleSTP} disabled={loading || !smilesInput} title="SwissTargetPrediction">STP</button>
+        <select onChange={handleShopSelect} disabled={loading || !smilesInput}>
+          <option value="">Shop:</option>
+          <option value="chemicalbook" title="ChemicalBook">1</option>
+          <option value="tansoole" title="Tansoole">2</option>
+          <option value="sigma" title="Sigma-Aldrich">3</option>
+          <option value="tci" title="TCI">4</option>
+          <option value="macklin" title="Macklin">5</option>
+          <option value="leyan" title="Leyan">6</option>
+        </select>
       </div>
       {/* Responsive styles */}
       <style>{`
@@ -371,7 +427,7 @@ function ControlPanel({
           align-items: center;
           width: 100%;
           height: auto;
-          max-width: 678px;
+          max-width: 739px;
           gap: 4px;
           margin: 0px auto;
           flex-wrap: nowrap;
@@ -396,7 +452,7 @@ function ControlPanel({
           opacity: 0.5;
           cursor: not-allowed;
         }
-        @media screen and (max-width: 685px) {
+        @media screen and (max-width: 746px) {
           .input-stars-row {
             max-width: 100vw;
             flex-wrap: wrap;

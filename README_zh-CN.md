@@ -12,7 +12,7 @@ Powered by [Ketcher](https://github.com/epam/ketcher) & [KetchKitSearch](https:/
 
 ## 依赖
 
-- [pubchem](https://pubchem.ncbi.nlm.nih.gov)
+- [pubchem](https://pubchem.ncbi.nlm.nih.gov) - 数据源
 
 ## 搜索目标
 
@@ -21,9 +21,16 @@ Powered by [Ketcher](https://github.com/epam/ketcher) & [KetchKitSearch](https:/
 
 - [nmrdb](https://www.nmrdb.org)
 - [pubchem](https://pubchem.ncbi.nlm.nih.gov)
-- [wikipedia](https://en.wikipedia.org)
-- [drugbank](https://go.drugbank.com)
+    - [wikipedia](https://en.wikipedia.org)
+    - [drugbank](https://go.drugbank.com)
 - [swisstargetprediction](https://www.swisstargetprediction.ch)
+- Shop
+    - [chemicalbook](https://www.chemicalbook.com)
+    - [tansoole](https://www.tansoole.com)
+    - [sigma-aldrich](https://www.sigmaaldrich.com)
+    - [tci](https://www.tcichemicals.com)
+    - [macklin](https://www.macklin.cn)
+    - [leyan](https://www.leyan.com)
 
 ## 预览
 
@@ -50,6 +57,13 @@ Powered by [Ketcher](https://github.com/epam/ketcher) & [KetchKitSearch](https:/
     - exact (详细)
     - fuzzy (模糊)
 - SwissTargetPrediction搜索
+- Shop
+    - 1 (ChemicalBook)
+    - 2 (Tansoole)
+    - 3 (Sigma-Aldrich)
+    - 4 (TCI)
+    - 5 (Macklin)
+    - 6 (Leyan)
 
 ## 更多
 
