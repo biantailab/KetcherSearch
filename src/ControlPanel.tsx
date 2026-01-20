@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  getWikipediaUrlByCID,
   getMolecularFormulaByCID,
   getPubChemCID,
   getCASByCID,
@@ -9,6 +8,7 @@ import {
   getPubChemData,
   getSMILESByCAS,
 } from '@/services/pubchem';
+import { getWikipediaUrlByCID } from '@/services/wikipedia';
 import {
   openChemicalBookByCAS,
   openLeyanByCAS,
