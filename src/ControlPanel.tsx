@@ -4,11 +4,11 @@ import {
   getPubChemCID,
   getCASByCID,
   getIUPACNameByCID,
-  getPubChemUrlByCID,
   getPubChemData,
   getSMILESByCAS,
-} from '@/services/pubchem';
-import { getWikipediaUrlByCID } from '@/services/wikipedia';
+} from '@/data-source/pubchem';
+import { getPubChemUrlByCID } from '@/search-target/pubchem';
+import { getWikipediaUrlByCID } from '@/search-target/wikipedia';
 import {
   openChemicalBookByCAS,
   openLeyanByCAS,
@@ -16,13 +16,14 @@ import {
   openSigmaByCAS,
   openTansooleByCAS,
   openTciByCAS
-} from './services/shop';
+} from './search-target/shop';
 import {
   findDrugBankId,
   buildDrugBankExactUrlByCAS,
   buildDrugBankFuzzyUrlBySmiles
-} from './services/drugbank';
-import { submitToSwissTargetPrediction } from './services/swiss';
+} from './search-target/drugbank';
+import { submitToSwissTargetPrediction } from './search-target/swiss';
+import { handleHNMR } from '@/search-target/nmrdb';
 
 interface ControlPanelProps {
   smilesInput: string;
@@ -188,13 +189,6 @@ function ControlPanel({
     } finally {
       setLoading(false);
       event.target.value = '';
-    }
-  };
-
-  const handleHNMR = () => {
-    if (smilesInput) {
-      const searchUrl = `https://www.nmrdb.org/new_predictor/index.shtml?v=latest&smiles=${encodeURIComponent(smilesInput)}`;
-      window.open(searchUrl, '_blank');
     }
   };
 
@@ -401,7 +395,7 @@ function ControlPanel({
           <option value="iupac" title="IUPACName">Name</option>
           <option value="formula" title="Molecular Formula">Formula</option>
         </select>
-        <button onClick={handleHNMR} disabled={loading || !smilesInput}>HNMR</button>
+        <button onClick={() => handleHNMR(smilesInput)} disabled={loading || !smilesInput}>HNMR</button>
         <button onClick={handlePubChem} disabled={loading || !smilesInput}>PubChem</button>
         <button onClick={handleGetWikipedia} disabled={loading || !smilesInput}>Wikipedia</button>
         <select onChange={handleDrugBankSelect} disabled={loading || !smilesInput}>
