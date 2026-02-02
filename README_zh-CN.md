@@ -1,4 +1,4 @@
-<img src="public/ketchersearch_logo.svg" alt="KetcherSearch logo" width="100" height="100" align="right" />
+<img src="public/logo.svg" alt="KetcherSearch logo" width="100" height="100" align="right" />
 
 # KetcherSearch
 
@@ -34,7 +34,7 @@ Powered by [Ketcher](https://github.com/epam/ketcher) & [KetchKitSearch](https:/
 
 ## 预览
 
-<img src="imgs/ketchersearch.gif" >
+<img src="imgs/demo.gif" >
 
 ## 功能
 
