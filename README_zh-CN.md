@@ -6,13 +6,14 @@
     <a href="README.md">English</a> | 简体中文
 </p>
 
-基于Ketcher的纯前端实现smiles⇄mol的从分子结构中搜索化合物信息
+基于Ketcher的纯前端实现SMILES⇄mol的从分子结构中搜索化合物信息
 
 Powered by [Ketcher](https://github.com/epam/ketcher) & [KetchKitSearch](https://github.com/biantailab/KetchKitSearch)
 
 ## 依赖
 
-- [pubchem](https://pubchem.ncbi.nlm.nih.gov) - 数据源
+- 数据源
+    - [pubchem](https://pubchem.ncbi.nlm.nih.gov)
 
 ## 搜索目标
 
@@ -24,7 +25,7 @@ Powered by [Ketcher](https://github.com/epam/ketcher) & [KetchKitSearch](https:/
     - [wikipedia](https://en.wikipedia.org)
     - [drugbank](https://go.drugbank.com)
 - [swisstargetprediction](https://www.swisstargetprediction.ch)
-- Shop
+- 购物
     - [chemicalbook](https://www.chemicalbook.com)
     - [tansoole](https://www.tansoole.com)
     - [sigma-aldrich](https://www.sigmaaldrich.com)
@@ -38,32 +39,32 @@ Powered by [Ketcher](https://github.com/epam/ketcher) & [KetchKitSearch](https:/
 
 ## 功能
 
-- 实时转换smiles和分子结构
+- 实时转换SMILES和分子结构
 - 通过CAS查询分子结构
-- Example:
-    - Benzyl titanium (苄钛)
-    - Nonanal (壬醛)
-    - Palytoxin (岩沙海葵毒素)
-- Clear smiles
-- Copy smiles
-- Get:
-    - CAS
-    - IUPACName
-    - Molecular Formula (分子式)
-- HNMR搜索
-- PubChem搜索
-- Wikipedia搜索
-- DrugBank搜索
-    - exact (详细)
-    - fuzzy (模糊)
-- SwissTargetPrediction搜索
-- Shop
-    - 1 (ChemicalBook)
-    - 2 (Tansoole)
-    - 3 (Sigma-Aldrich)
-    - 4 (TCI)
-    - 5 (Macklin)
-    - 6 (Leyan)
+- `Example:`
+    - `Benzyl titanium` 苄钛
+    - `Nonanal` 壬醛
+    - `Palytoxin` 岩沙海葵毒素
+- `Clear`
+- `Copy`
+- `Get:`
+    - `CAS`
+    - `Name` IUPAC名称
+    - `Formula` 分子式
+- `HNMR`
+- `PubChem`
+- `Wikipedia`
+- `DrugBank`
+    - `exact` 精确搜索
+    - `fuzzy` 模糊、结构、相似搜索
+- `STP` 瑞士目标预测
+- `Shop`
+    - `1` ChemicalBook
+    - `2` 泰坦
+    - `3` Sigma-Aldrich
+    - `4` TCI
+    - `5` 麦克林
+    - `6` 乐研
 
 ## 更多
 

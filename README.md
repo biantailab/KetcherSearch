@@ -6,13 +6,14 @@
    English |  <a href="README_zh-CN.md">简体中文</a>
 </p>
 
-Pure front-end implementation of smiles⇄mol based on Ketcher Searching for compound information from molecular structures
+Pure front-end implementation of SMILES⇄mol based on Ketcher Searching for compound information from molecular structures
 
 Powered by [Ketcher](https://github.com/epam/ketcher) & [KetchKitSearch](https://github.com/biantailab/KetchKitSearch)
 
 ## Dependencies
 
-- [pubchem](https://pubchem.ncbi.nlm.nih.gov) - Data source
+- Data source
+    - [pubchem](https://pubchem.ncbi.nlm.nih.gov)
 
 ## Search target
 
@@ -38,32 +39,32 @@ Powered by [Ketcher](https://github.com/epam/ketcher) & [KetchKitSearch](https:/
 
 ## Functionality
 
-- Real-time conversion of smiles and mol
+- Real-time conversion of SMILES and mol
 - Query the mol via CAS
-- Example:
-    - Benzyl titanium
-    - Nonanal
-    - Palytoxin
-- Clear smiles
-- Copy smiles
-- Get:
-    - CAS
-    - IUPACName
-    - Molecular Formula
-- HNMR search
-- PubChem search
-- Wikipedia search
-- DrugBank search
-    - exact
-    - fuzzy
-- SwissTargetPrediction search
-- Shop
-    - 1 (ChemicalBook)
-    - 2 (Tansoole)
-    - 3 (Sigma-Aldrich)
-    - 4 (TCI)
-    - 5 (Macklin)
-    - 6 (Leyan)
+- `Example:`
+    - `Benzyl titanium`
+    - `Nonanal`
+    - `Palytoxin`
+- `Clear`
+- `Copy`
+- `Get:`
+    - `CAS`
+    - `Name` IUPACName
+    - `Formula` Molecular Formula
+- `HNMR`
+- `PubChem`
+- `Wikipedia`
+- `DrugBank`
+    - `exact`
+    - `fuzzy` Fuzzy, structural and similar search
+- `STP` SwissTargetPrediction
+- `Shop`
+    - `1` ChemicalBook
+    - `2` Tansoole
+    - `3` Sigma-Aldrich
+    - `4` TCI
+    - `5` Macklin
+    - `6` Leyan
 
 ## More
 
